@@ -90,13 +90,15 @@
     <audio id="backgroundMusic" src="your-music-link.mp3" loop></audio>
 
     <script>
-        // Step 1: Show choice buttons when heart is clicked
+        // Show choice buttons when heart is clicked
         document.getElementById('heart').onclick = function() {
             document.getElementById('arrow').classList.add('hidden');
             document.getElementById('choices').classList.remove('hidden');
+            // Start the falling hearts animation
+            startFallingHearts();
         }
 
-        // Step 2: Choice button actions
+        // Choice button actions
         function love() {
             document.getElementById('choices').classList.add('hidden');
             document.getElementById('dateSection').classList.remove('hidden');
@@ -104,18 +106,20 @@
 
         function noLove() {
             const noButton = document.getElementById('noButton');
+            // Move button to a random position
             noButton.style.position = "absolute";
             noButton.style.top = Math.random() * 80 + 'vh';
             noButton.style.left = Math.random() * 80 + 'vw';
         }
 
-        // Step 3: Check date input and animate button if incorrect
+        // Check date input and animate button if incorrect
         function checkDate() {
             const dateInput = document.getElementById('dateInput').value;
             const correctDate = '2023-06-24';
             const nextButton = document.querySelector('.next-button');
 
             if (dateInput !== correctDate) {
+                // Move button to a random position if date is incorrect
                 nextButton.style.transform = `translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px)`;
             } else {
                 document.getElementById('dateSection').classList.add('hidden');
@@ -123,13 +127,14 @@
             }
         }
 
-        // Step 4: Display message and play music with animated hearts
+        // Display message and play music
         function showMessage() {
             document.getElementById('message').classList.remove('hidden');
-            document.getElementById('heartsContainer').classList.remove('hidden');
             document.getElementById('backgroundMusic').play();
+        }
 
-            // Create falling hearts
+        // Function to create falling hearts
+        function startFallingHearts() {
             setInterval(() => {
                 const heart = document.createElement('div');
                 heart.classList.add('heart-animation');
