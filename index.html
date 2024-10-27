@@ -6,29 +6,96 @@
     <title>I'm Sorry</title>
     <style>
         body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .container {
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
             text-align: center;
+            position: relative;
+            color: #fff;
+            z-index: 1;
         }
         h1 {
+            font-size: 3em;
             color: #ff6b6b;
         }
         p {
+            font-size: 1.5em;
+            color: #333;
+            margin: 20px 0;
+        }
+        .heart {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.7;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% {
+                transform: translateY(0) translateX(-50%);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) translateX(-50%);
+                opacity: 0;
+            }
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            color: #fff;
+            background-color: #ff6b6b;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #ff4d4d;
+        }
+        .hidden-message {
+            display: none;
+            margin-top: 20px;
             font-size: 1.2em;
             color: #333;
+        }
+        iframe {
+            display: none; /* Hide the YouTube iframe */
         }
     </style>
 </head>
 <body>
-    <div>
+    <div class="container">
         <h1>I'm Sorry</h1>
-        <p>Hi [Her Name],</p>
-        <p>Gusto ko lang mag-sorry sa nangyari kanina. Hindi ko sinasadya at hindi ko gusto na mag-away tayo. Mahal na mahal kita, at sana mapatawad mo ako. </p>
-        <p>- Cholo</p>
+        <p>Hi [Jirah Grace],</p>
+        <p>Gusto ko lang mag-sorry sa nangyari kanina. Hindi ko sinasadya at hindi ko gusto na mag-away tayo. Mahal na mahal kita, at sana mapatawad mo ako.</p>
+        <button class="button" onclick="showMessage()">Click for a Sweet Message</button>
+        <p class="hidden-message" id="sweetMessage">“wala namang perfect na rs pero sana mapatawad mo ako sa lahay ng mga kasalanan at pagkakamali ko bebe i love you so much po sorry wag moko iwan ha i love you”</p>
     </div>
+    <iframe id="music" width="560" height="315" src="https://www.youtube.com/embed/NN0wzUeWc-I?autoplay=1&mute=1&loop=1&playlist=NN0wzUeWc-I" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <script>
+        function showMessage() {
+            document.getElementById('sweetMessage').style.display = 'block';
+        }
+
+        // Create falling hearts
+        setInterval(() => {
+            const heart = document.createElement('img');
+            heart.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Heart_icon_red.svg/2048px-Heart_icon_red.svg.png'; // Heart image
+            heart.classList.add('heart');
+            heart.style.left = Math.random() * 100 + 'vw'; // Random horizontal position
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's'; // Random fall duration
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000); // Remove heart after falling
+        }, 1000);
+    </script>
 </body>
 </html>
