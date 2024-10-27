@@ -15,6 +15,7 @@
             height: 100vh;
             background-color: #f0f0f0;
             font-family: Arial, sans-serif;
+            overflow: hidden;
         }
         .center-content {
             text-align: center;
@@ -43,7 +44,6 @@
             background-color: #ff6b6b;
             color: white;
         }
-        .next-button { position: relative; }
         .animated-hearts {
             position: absolute;
             width: 100%;
@@ -75,7 +75,7 @@
         <div class="arrow" id="arrow">Click this</div>
         <div class="choice-buttons hidden" id="choices">
             <button onclick="love()">You love your bf</button>
-            <button onclick="noLove()">No</button>
+            <button onclick="noLove()" id="noButton">No</button>
         </div>
         <div class="date-input hidden" id="dateSection">
             <p>Please enter the date you became a couple:</p>
@@ -103,7 +103,10 @@
         }
 
         function noLove() {
-            alert("Oh no! Try again.");
+            const noButton = document.getElementById('noButton');
+            noButton.style.position = "absolute";
+            noButton.style.top = Math.random() * 80 + 'vh';
+            noButton.style.left = Math.random() * 80 + 'vw';
         }
 
         // Step 3: Check date input and animate button if incorrect
