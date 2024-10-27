@@ -5,97 +5,137 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>I'm Sorry</title>
     <style>
-        body {
+        /* Basic styles */
+        body, html {
             margin: 0;
-            overflow: hidden;
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
-        .container {
+            padding: 0;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        .center-content {
             text-align: center;
-            position: relative;
-            color: #fff;
-            z-index: 1;
         }
-        h1 {
-            font-size: 3em;
-            color: #ff6b6b;
-        }
-        p {
-            font-size: 1.5em;
-            color: #333;
-            margin: 20px 0;
-        }
+        .hidden { display: none; }
         .heart {
-            position: absolute;
-            top: -50px;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0.7;
-            animation: fall linear infinite;
+            font-size: 5em;
+            color: red;
+            cursor: pointer;
         }
-        @keyframes fall {
-            0% {
-                transform: translateY(0) translateX(-50%);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) translateX(-50%);
-                opacity: 0;
-            }
-        }
-        .button {
-            padding: 10px 20px;
+        .arrow {
             font-size: 1.2em;
-            color: #fff;
-            background-color: #ff6b6b;
+            color: #333;
+            margin-top: 10px;
+        }
+        .choice-buttons, .date-input, .message {
+            margin-top: 20px;
+        }
+        .choice-buttons button, .next-button {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
             border: none;
             border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+            margin: 5px;
+            background-color: #ff6b6b;
+            color: white;
         }
-        .button:hover {
-            background-color: #ff4d4d;
+        .next-button { position: relative; }
+        .animated-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
         }
-        .hidden-message {
-            display: none;
-            margin-top: 20px;
-            font-size: 1.2em;
-            color: #333;
+        .heart-animation {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: red;
+            clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 50% 76%, 18% 100%, 0% 38%);
+            animation: fall 5s infinite ease-in;
+            opacity: 0.7;
         }
-        iframe {
-            display: none; /* Hide the YouTube iframe */
+        @keyframes fall {
+            0% { transform: translateY(-100vh) rotate(0); }
+            100% { transform: translateY(100vh) rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>I'm Sorry</h1>
-        <p>Hi [Jirah Grace],</p>
-        <p>Gusto ko lang mag-sorry sa nangyari kanina. Hindi ko sinasadya at hindi ko gusto na mag-away tayo. Mahal na mahal kita, at sana mapatawad mo ako.</p>
-        <button class="button" onclick="showMessage()">Click for a Sweet Message</button>
-        <p class="hidden-message" id="sweetMessage">“wala namang perfect na rs pero sana mapatawad mo ako sa lahay ng mga kasalanan at pagkakamali ko bebe i love you so much po sorry wag moko iwan ha i love you”</p>
+    <div class="center-content">
+        <div class="heart" id="heart">&#10084;</div>
+        <div class="arrow" id="arrow">Click this</div>
+        <div class="choice-buttons hidden" id="choices">
+            <button onclick="love()">You love your bf</button>
+            <button onclick="noLove()">No</button>
+        </div>
+        <div class="date-input hidden" id="dateSection">
+            <p>Please enter the date you became a couple:</p>
+            <input type="date" id="dateInput">
+            <button class="next-button" onclick="checkDate()">Next</button>
+        </div>
+        <div class="message hidden" id="message">
+            <p>Love, sorry kung minsan nag-aaway tayo, maliit man o malaking bagay. Sana kahit ganun, walang magbago sa pagmamahalan natin. Ayoko maghiwalay tayo; mahal na mahal kita at gusto ko tayo na forever. Sana palagi mong piliin mag-stay kahit minsan di ko pinapakita ang effort. Pero sana malaman mo na kahit ganun, mahal na mahal kita. I love you so much, mwahhh!</p>
+        </div>
+        <div class="animated-hearts hidden" id="heartsContainer"></div>
     </div>
-    <iframe id="music" width="560" height="315" src="https://www.youtube.com/embed/NN0wzUeWc-I?autoplay=1&mute=1&loop=1&playlist=NN0wzUeWc-I" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <audio id="backgroundMusic" src="your-music-link.mp3" loop></audio>
+
     <script>
-        function showMessage() {
-            document.getElementById('sweetMessage').style.display = 'block';
+        // Step 1: Show choice buttons when heart is clicked
+        document.getElementById('heart').onclick = function() {
+            document.getElementById('arrow').classList.add('hidden');
+            document.getElementById('choices').classList.remove('hidden');
         }
 
-        // Create falling hearts
-        setInterval(() => {
-            const heart = document.createElement('img');
-            heart.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Heart_icon_red.svg/2048px-Heart_icon_red.svg.png'; // Heart image
-            heart.classList.add('heart');
-            heart.style.left = Math.random() * 100 + 'vw'; // Random horizontal position
-            heart.style.animationDuration = Math.random() * 3 + 2 + 's'; // Random fall duration
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 5000); // Remove heart after falling
-        }, 1000);
+        // Step 2: Choice button actions
+        function love() {
+            document.getElementById('choices').classList.add('hidden');
+            document.getElementById('dateSection').classList.remove('hidden');
+        }
+
+        function noLove() {
+            alert("Oh no! Try again.");
+        }
+
+        // Step 3: Check date input and animate button if incorrect
+        function checkDate() {
+            const dateInput = document.getElementById('dateInput').value;
+            const correctDate = '2023-06-24';
+            const nextButton = document.querySelector('.next-button');
+
+            if (dateInput !== correctDate) {
+                nextButton.style.transform = `translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px)`;
+            } else {
+                document.getElementById('dateSection').classList.add('hidden');
+                showMessage();
+            }
+        }
+
+        // Step 4: Display message and play music with animated hearts
+        function showMessage() {
+            document.getElementById('message').classList.remove('hidden');
+            document.getElementById('heartsContainer').classList.remove('hidden');
+            document.getElementById('backgroundMusic').play();
+
+            // Create falling hearts
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart-animation');
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+                document.getElementById('heartsContainer').appendChild(heart);
+                setTimeout(() => heart.remove(), 5000);
+            }, 300);
+        }
     </script>
 </body>
 </html>
